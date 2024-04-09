@@ -8,17 +8,20 @@ import datetime
 import sys
 
 logging.basicConfig(
-    format='%(levelname)s:%(message)s', level=logging.WARNING)
+    format='%(levelname)s:%(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 utc=pytz.UTC
 
-list_all_restored_objects = False
+list_all_restored_objects = True
 
-s3 = boto3.resource('s3')
+#Use mfa credentials
+session = boto3.Session(profile_name='mfa')
+s3 = session.resource('s3')
+#s3 = boto3.resource('s3')
 
 # TODO: replace name-of-the-bucket with bucket name
-bucket_name = 'name-of-the-bucket'
+bucket_name = 'bucketname'
 
 if bucket_name == 'name-of-the-bucket':
     logger.error("Please, set bucket_name before running this script")
@@ -28,7 +31,7 @@ if bucket_name == 'name-of-the-bucket':
 # Syntax:
 # datetime(year, month, day, hour, minute, second, microsecond, UTC-00:00)
 # Example:
-# point_of_restore = datetime.datetime(2022, 5, 6, 16, 0, 0, 0, pytz.UTC)
+point_of_restore = datetime.datetime(2024, 4, 7, 21, 0, 0, 0, pytz.UTC)
 
 try:
     logger.info("Variable point_of_restore has been set as %s", point_of_restore)
